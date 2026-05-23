@@ -30,17 +30,34 @@ class Frank < Formula
     bin.install "frank"
   end
 
+  service do
+    run [opt_bin/"frank", "orchestrator", "serve", "--bind", "127.0.0.1:7780"]
+    keep_alive true
+    log_path var/"log/frank/orchestrator.log"
+    error_log_path var/"log/frank/orchestrator.error.log"
+    environment_variables PATH: std_service_path_env
+  end
+
   test do
     assert_match "frank #{version}", shell_output("#{bin}/frank --version")
   end
 
   def caveats
     <<~EOS
-      frank 装好了。下一步:
+      frank 装好了。
 
-        frank login --from-host tx     # 拉 sync-agent token (无 token 时 memory / orchestrator 命令会 401)
-        frank doctor                   # 11 项环境健康检查
-        frank daemon install           # 注册 launchd 服务 + 浏览器开 http://127.0.0.1:7780
+      启动后台服务 (Web UI + orchestrator):
+        brew services start frank          # 一次, 重启自动起
+        open http://127.0.0.1:7780         # Web UI
+
+      日常控制:
+        brew services list                 # 看状态
+        brew services stop frank
+        brew services restart frank
+        brew uninstall frank               # 自动 stop + 清服务注册
+
+      首次配置 sync-agent token (用 memory / 跨设备同步才需要):
+        frank login                        # 看引导
 
       文档: https://github.com/hutiefang76/skills-frank#readme
     EOS

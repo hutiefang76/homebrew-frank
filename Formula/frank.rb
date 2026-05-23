@@ -1,28 +1,28 @@
 class Frank < Formula
   desc "AI toolchain governance: manage skills + MCP across Claude Code / codex / opencode"
   homepage "https://github.com/hutiefang76/skills-frank"
-  version "0.7.3"
+  version "0.8.0"
   license "MIT"
 
   on_macos do
     on_arm do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-aarch64-apple-darwin.tar.gz"
-      sha256 "8d1426541aa1cd1dbc472dd9d2779ec32030e944158de7a68606e753a35854da"
+      sha256 "02d272b859fd91fa07c2b75f0e9c0de33d6da8daf568c0c226b5e1741c7ecfbc"
     end
     on_intel do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-x86_64-apple-darwin.tar.gz"
-      sha256 "b2bcf391ab23da2d23929eb48fca0894434c9ec91109a04923631493b2138166"
+      sha256 "1216cc45f308c466234fb6dd38046f54de816758a516111ae4d53a3bb7233677"
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "c5b3cf97ff66d165afcd7fcc93f9c970f52f5d429a44242c303be183ccb7459a"
+      sha256 "9738cd83f41d57c6bc7878c196817dc6b23fae411d5ae4b4af611177acac3712"
     end
     on_intel do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "98f47f52ad7dc10786cdb47f69a20b69aa35e943f4bf9f3348f6eeec8957fa4e"
+      sha256 "ca9d41d39ba84cf816e63ee2e552c0bd9e62bbc25113159788b0138410cab06d"
     end
   end
 

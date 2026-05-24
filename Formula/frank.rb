@@ -1,28 +1,28 @@
 class Frank < Formula
   desc "AI toolchain governance: manage skills + MCP across Claude Code / codex / opencode"
   homepage "https://github.com/hutiefang76/skills-frank"
-  version "0.10.1"
+  version "0.10.2"
   license "MIT"
 
   on_macos do
     on_arm do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-aarch64-apple-darwin.tar.gz"
-      sha256 "6d279b07ee20f4ff2e04b204031d028142dd54ff10dcfceea9667ea4d7199737"
+      sha256 "5ef0bea807c62747a33450e892201a2effa30626e1e8a15b87fce552a6d149f5"
     end
     on_intel do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-x86_64-apple-darwin.tar.gz"
-      sha256 "7c0dbc102214cee7bc82f704fa9fe85b03c5ae07c4e9edc2edac429a4d8aa1ed"
+      sha256 "10c2f9d4b08525efc1a1530874f6d0f8d1f7cbbe31343661c58ada38d244e48d"
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "a1c9b82efb661f6db88f6fa713cb50f8a61d0403d8082e0a916779114cc62fc1"
+      sha256 "f62cc4404aa39e222761e7e8589eb05ad0b6234607e7404b360c907cefff8b86"
     end
     on_intel do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "cd9382138804358e4be1dfda1176952a4a4bbc79f02085f3594a6c2a438e98fe"
+      sha256 "65c3d216de334083ca9270a7be5c34fb59b47b8a415d393218c13aba100a458a"
     end
   end
 
@@ -30,13 +30,9 @@ class Frank < Formula
     bin.install "frank"
   end
 
-  service do
-    run [opt_bin/"frank", "orchestrator", "serve", "--bind", "127.0.0.1:7780"]
-    keep_alive true
-    log_path var/"log/frank/orchestrator.log"
-    error_log_path var/"log/frank/orchestrator.error.log"
-    environment_variables PATH: std_service_path_env
-  end
+  # v0.10.2: 删 service block — launchd-managed daemon 触发 macOS TCC 弹窗
+  # (Apple Music / 照片 / 下载 / 文稿). 改为终端启动 `frank ui` 继承 TCC 不弹.
+  # 详见 docs/known-issues.md 与 v0.10.2 release note.
 
   test do
     assert_match "frank #{version}", shell_output("#{bin}/frank --version")
@@ -46,35 +42,34 @@ class Frank < Formula
     <<~EOS
       frank #{version} 装好了。
 
-      启动后台服务 (Web UI + orchestrator):
-        brew services start frank          # 一次, 重启自动起
-        open http://127.0.0.1:7780         # Web UI
+      ▶ 启动 Web UI (一次性, 终端跑, Ctrl-C 退, **不弹 TCC 权限**):
+        frank ui                              # 自动开浏览器到 http://127.0.0.1:7780
+        frank ui --no-open                    # ssh 隧道 / headless 场景
+        frank ui --bind 127.0.0.1:7799        # 自定义端口
 
-      日常控制:
-        brew services list                 # 看状态
-        brew services restart frank
-        brew services stop frank
+      ⚠️  v0.10.2 起 **不再用 brew services** — 之前 `brew services start frank`
+      启的 launchd daemon 会触发 macOS TCC (Apple Music / 照片 / 下载 / 文稿弹窗),
+      因为 launchd 启动的进程不继承用户 Terminal 的 TCC 授权. 终端 `frank ui` 继承
+      终端授权, 永不弹.
+
+      如果你 < v0.10.2 装过 brew services 起的 daemon, 升级后请清:
+        brew services stop frank              # 停旧 launchd
+        rm -f ~/Library/LaunchAgents/homebrew.mxcl.frank.plist
 
       首次配置 (可选):
-        frank login                        # sync-agent token 引导
-        frank config detect-proxy          # 自动配 Clash/Surge 代理
-        frank install <name>               # 装 skill / MCP (走 libgit2, 不需系统 git)
+        frank login                           # sync-agent token 引导
+        frank config detect-proxy             # 自动配 Clash/Surge 代理
+        frank install <name>                  # 装 skill / MCP (走 libgit2)
 
       ============================================================
       ⚠️  彻底卸载 (Homebrew 设计不动用户数据, 必须**先**清):
-        frank cleanup                         # 一行清 frank 官方装的全部 + 引导 brew 卸载
-        brew services stop frank              # 停 daemon
+        frank cleanup                         # 一行清 frank 官方装的全部
         brew uninstall frank                  # 删 binary (brew 自动 untap)
         rm -rf ~/.frank/                      # 清 token / state / logs
 
-      v0.7.3 起 `frank cleanup` (等价 `frank uninstall` 无参数) 只清 frank 官方装的
-      (frank-official + frank-recommended); 用户自己 `frank install --url` 装的第三方
-      (community/team/private) **不动** — 自己装的自己卸. 想一并清: `frank uninstall
-      --including-3rd-party`.
-
-      只跑 brew uninstall frank 会留: ~/.frank/, ~/.{claude,codex}/skills/frank-*,
-      ~/.claude.json mcpServers 注入, ~/.codex/config.toml mcp_servers 注入. brew
-      不知道这些是 frank 装的, **设计上不动用户数据** (ollama / postgres 同理).
+      v0.7.3 起 `frank cleanup` (等价 `frank uninstall` 无参) 只清 frank 官方装的
+      (frank-official + frank-recommended). 用户自己 `frank install --url` 装的
+      第三方不动. 想一并清: `frank uninstall --including-3rd-party`.
       ============================================================
 
       文档: https://github.com/hutiefang76/skills-frank#readme

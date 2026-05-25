@@ -1,28 +1,28 @@
 class Frank < Formula
   desc "AI toolchain governance: manage skills + MCP across Claude Code / codex / opencode"
   homepage "https://github.com/hutiefang76/skills-frank"
-  version "0.12.0"
+  version "0.13.0"
   license "MIT"
 
   on_macos do
     on_arm do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-aarch64-apple-darwin.tar.gz"
-      sha256 "014f4af361c78a6842d1150370b73bad99a6e2e497be6a351850839861adde47"
+      sha256 "0d7da57fbc30fd052c4a8c41638fedf736559c672b7172de62a3ec5040a866b3"
     end
     on_intel do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-x86_64-apple-darwin.tar.gz"
-      sha256 "368e7d7a8418a0e1ac2a7141707a5e4a25d1047196e329124bad674272e2fe7c"
+      sha256 "ab53a5078e1bbfad28891836286a1ff61ff4222a12275b0344fe761bdd1a8da7"
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "16d3f37542f1599145ba7fc2cca0c2494f54662b40e26d05ae8893f7c547fe5f"
+      sha256 "3dac363902a56faf4f3a8dad197e77156fcc709dd79ad51857d7947ca753f2d8"
     end
     on_intel do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "884de0d034b6c9e7a6d76608b750edecda5a86fba9e345b1073cd782d60a50ef"
+      sha256 "b249d9fa7c081e7d491296c65e31a028d74192ddb56d14ac4962a1bd7bcf9f71"
     end
   end
 
@@ -42,7 +42,14 @@ class Frank < Formula
     <<~EOS
       frank #{version} 装好了。
 
-      🆕 v0.12.0 新增:
+      🆕 v0.13.0 新增 (累加 v0.12.0):
+        • 服务端发 token — 首次跑提交机器指纹 (hostname/MAC/CPU/OS), 服务端
+          machine_code 1:1 绑 tenant, 防 VM 集群匿名 spam (详见 ADR-013)
+        • frank tenant link — 用现有 token 把新机器加入 tenant (多机共享 namespace)
+        • frank tenant reset — 清本地 token + machine_id (下次跑触发 provision 拿新 token)
+        • frank-official + doris-ops — Apache Doris OLAP 运维 (查表/性能/元数据, Python)
+
+      🆕 v0.12.0:
         • 自动注册 — 首次跑 frank 任何命令会随机生成 token 注册到默认 sync-agent
         • 配额 10k records / tenant — 满了 add 会拒, 查用量: frank tenant status
         • 删除流程 — frank tenant delete (14 天倒计时, frank tenant cancel-delete 撤回)

@@ -1,28 +1,28 @@
 class Frank < Formula
   desc "AI toolchain governance: manage skills + MCP across Claude Code / codex / opencode"
   homepage "https://github.com/hutiefang76/skills-frank"
-  version "0.11.3"
+  version "0.12.0"
   license "MIT"
 
   on_macos do
     on_arm do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-aarch64-apple-darwin.tar.gz"
-      sha256 "708bdc47193427cffed196b5d603843c0050b4ad9d3d6a35616a6f4d5b6a321e"
+      sha256 "014f4af361c78a6842d1150370b73bad99a6e2e497be6a351850839861adde47"
     end
     on_intel do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-x86_64-apple-darwin.tar.gz"
-      sha256 "f0dd689c02560d93ab68b537327180ad7a44fe503684fcfd785c5685c993e377"
+      sha256 "368e7d7a8418a0e1ac2a7141707a5e4a25d1047196e329124bad674272e2fe7c"
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "2bdaa38d643cad47b99347eac5511b7ab334efd2ae5bd6a104869397c17ef648"
+      sha256 "16d3f37542f1599145ba7fc2cca0c2494f54662b40e26d05ae8893f7c547fe5f"
     end
     on_intel do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "251471894b2d46800ee423f62d6129b01cbe16d53a0aaae267852f9965b31c67"
+      sha256 "884de0d034b6c9e7a6d76608b750edecda5a86fba9e345b1073cd782d60a50ef"
     end
   end
 
@@ -41,6 +41,13 @@ class Frank < Formula
   def caveats
     <<~EOS
       frank #{version} 装好了。
+
+      🆕 v0.12.0 新增:
+        • 自动注册 — 首次跑 frank 任何命令会随机生成 token 注册到默认 sync-agent
+        • 配额 10k records / tenant — 满了 add 会拒, 查用量: frank tenant status
+        • 删除流程 — frank tenant delete (14 天倒计时, frank tenant cancel-delete 撤回)
+        • Claude hook 自动安装 — frank hook install (PostToolUse 截 mcp__memory → frank-memory)
+        • CLAUDE.md 自动注入 — frank claude inject (把 frank-memory 介绍写入 ~/.claude/CLAUDE.md)
 
       ▶ 启动 Web UI (一次性, 终端跑, Ctrl-C 退, **不弹 TCC 权限**):
         frank ui                              # 自动开浏览器到 http://127.0.0.1:7780

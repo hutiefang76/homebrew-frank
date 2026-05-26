@@ -1,28 +1,28 @@
 class Frank < Formula
   desc "AI toolchain governance: manage skills + MCP across Claude Code / codex / opencode"
   homepage "https://github.com/hutiefang76/skills-frank"
-  version "0.13.0"
+  version "0.13.2"
   license "MIT"
 
   on_macos do
     on_arm do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-aarch64-apple-darwin.tar.gz"
-      sha256 "0d7da57fbc30fd052c4a8c41638fedf736559c672b7172de62a3ec5040a866b3"
+      sha256 "862d3870d582fa3472e11742643e13bd41737e8a4c3a6768d02828f5b3a23676"
     end
     on_intel do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-x86_64-apple-darwin.tar.gz"
-      sha256 "ab53a5078e1bbfad28891836286a1ff61ff4222a12275b0344fe761bdd1a8da7"
+      sha256 "158982ba0e62431ce5864fd2dec483baa54c140f84f344f62dfdc815b480f26c"
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "3dac363902a56faf4f3a8dad197e77156fcc709dd79ad51857d7947ca753f2d8"
+      sha256 "6bccd2bf53eedaa852fcd972806b519aefb1657a09ae48444fc095d6d888a34d"
     end
     on_intel do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "b249d9fa7c081e7d491296c65e31a028d74192ddb56d14ac4962a1bd7bcf9f71"
+      sha256 "5322c757ec340a58855469281fc062540db0bf0cdf187c2d4bb740d9059ccc5a"
     end
   end
 
@@ -42,12 +42,19 @@ class Frank < Formula
     <<~EOS
       frank #{version} 装好了。
 
-      🆕 v0.13.0 新增 (累加 v0.12.0):
-        • 服务端发 token — 首次跑提交机器指纹 (hostname/MAC/CPU/OS), 服务端
-          machine_code 1:1 绑 tenant, 防 VM 集群匿名 spam (详见 ADR-013)
-        • frank tenant link — 用现有 token 把新机器加入 tenant (多机共享 namespace)
-        • frank tenant reset — 清本地 token + machine_id (下次跑触发 provision 拿新 token)
-        • frank-official + doris-ops — Apache Doris OLAP 运维 (查表/性能/元数据, Python)
+      🆕 v0.13.2 新增 (产品化收官):
+        • 内置 skill 卸载保护 — frank-ask-* / frank-mem-* 是 frank 功能依赖, 默认拦,
+          要 `--force-internal` 才放. 防误卸残废 frank.
+        • MCP 真状态探活 — `frank list` 看 ~/.claude.json 等真 config 文件, 不只信 state.
+          修 mcp-sequential-thinking 等误显 enabled 的问题.
+        • 装前 preflight 检查 — `frank install frank-ask-gemini` 先 `which gemini`, 没装就警告.
+        • doctor 加 tenant 状态 — 记录用量 / 配额 / 14d 删除倒计时, 一处全看.
+        • history list 自动清 v0.10 前老条目 (静默, 不烦用户).
+        • ai ask 4 家快捷开关: --claude / --gpt / --opencode / --gemini.
+        • install <URL> 自动识别 git URL, 不用再写 --url.
+
+      v0.13.0 服务端发 token (机器指纹 1:1 绑 tenant, 防 VM 集群匿名 spam, ADR-013).
+      v0.12.0 服务端 tenant registry + 配额 10k records + 14 天删除流程.
 
       🆕 v0.12.0:
         • 自动注册 — 首次跑 frank 任何命令会随机生成 token 注册到默认 sync-agent

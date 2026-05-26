@@ -40,60 +40,68 @@ class Frank < Formula
 
   def caveats
     <<~EOS
-      frank #{version} 装好了。
+      frank #{version} installed / 装好了。
 
-      🆕 v0.13.2 新增 (产品化收官):
-        • 内置 skill 卸载保护 — frank-ask-* / frank-mem-* 是 frank 功能依赖, 默认拦,
-          要 `--force-internal` 才放. 防误卸残废 frank.
-        • MCP 真状态探活 — `frank list` 看 ~/.claude.json 等真 config 文件, 不只信 state.
-          修 mcp-sequential-thinking 等误显 enabled 的问题.
-        • 装前 preflight 检查 — `frank install frank-ask-gemini` 先 `which gemini`, 没装就警告.
-        • doctor 加 tenant 状态 — 记录用量 / 配额 / 14d 删除倒计时, 一处全看.
-        • history list 自动清 v0.10 前老条目 (静默, 不烦用户).
-        • ai ask 4 家快捷开关: --claude / --gpt / --opencode / --gemini.
-        • install <URL> 自动识别 git URL, 不用再写 --url.
+      ── What is frank / Frank 是啥 ─────────────────────────────────
+        Govern AI toolchains across Claude Code / codex / opencode:
+        skills + MCP + distributed memory + cross-AI ask, one CLI.
+        跨 3 个 AI CLI 平台治理 skill + MCP + 分布式记忆 + 跨 AI ask,
+        一个命令搞定全部。
 
-      v0.13.0 服务端发 token (机器指纹 1:1 绑 tenant, 防 VM 集群匿名 spam, ADR-013).
-      v0.12.0 服务端 tenant registry + 配额 10k records + 14 天删除流程.
+      ── Main features / 主要功能 ──────────────────────────────────
+        • Skill + MCP install/uninstall, three platforms in sync
+          Skill + MCP 一键装卸, 三平台同步
+        • Distributed memory: LanceDB local + Qdrant server, Hybrid RRF
+          分布式记忆: LanceDB 本地 + Qdrant 服务端, Hybrid RRF 召回
+        • Cross-AI ask: --claude / --gpt / --opencode / --gemini
+          跨 AI ask: 一行调四家 cli
+        • Machine-bound tenant token, 10k records quota, 14d deletion
+          机器绑定 token, 10k 配额, 14 天删除流程
 
-      🆕 v0.12.0:
-        • 自动注册 — 首次跑 frank 任何命令会随机生成 token 注册到默认 sync-agent
-        • 配额 10k records / tenant — 满了 add 会拒, 查用量: frank tenant status
-        • 删除流程 — frank tenant delete (14 天倒计时, frank tenant cancel-delete 撤回)
-        • Claude hook 自动安装 — frank hook install (PostToolUse 截 mcp__memory → frank-memory)
-        • CLAUDE.md 自动注入 — frank claude inject (把 frank-memory 介绍写入 ~/.claude/CLAUDE.md)
+      ── What's new in v#{version} / 本版新增 ───────────────────────
+        • Built-in skill uninstall protection (frank-ask-* / frank-mem-*)
+          内置 skill 卸载保护
+        • Real MCP probe — `frank list` reads ~/.claude.json etc.
+          MCP 真状态探活
+        • Pre-install CLI check (warn if `gemini` missing)
+          装前 cli 检查
+        • doctor adds tenant status (records / quota / deletion)
+          doctor 加 tenant 状态节
+        • ai ask shortcuts --claude / --gpt / --opencode / --gemini
+          ai ask 快捷开关
+        • `frank install <URL>` auto-detects git URL
+          install 自动识别 git URL
 
-      ▶ 启动 Web UI (一次性, 终端跑, Ctrl-C 退, **不弹 TCC 权限**):
-        frank ui                              # 自动开浏览器到 http://127.0.0.1:7780
-        frank ui --no-open                    # ssh 隧道 / headless 场景
-        frank ui --bind 127.0.0.1:7799        # 自定义端口
+      ── Quick start / 开始用 ──────────────────────────────────────
+        frank doctor              # health check / 体检
+        frank list                # show all skills / 列出全部 skill
+        frank install nacos-ops   # install a skill / 装一个 skill
+        frank ai ask --opencode "hi"   # ask any AI / 跨 AI ask
+        frank memory add "fact"   # add to memory / 加记忆
+        frank ui                  # Web UI at 127.0.0.1:7780 / 开浏览器面板
 
-      ⚠️  v0.10.2 起 **不再用 brew services** — 之前 `brew services start frank`
-      启的 launchd daemon 会触发 macOS TCC (Apple Music / 照片 / 下载 / 文稿弹窗),
-      因为 launchd 启动的进程不继承用户 Terminal 的 TCC 授权. 终端 `frank ui` 继承
-      终端授权, 永不弹.
+      ── After login, you can / 登陆后能干嘛 ───────────────────────
+        • Sync memory across machines (frank tenant link)
+          多机共享同一份分布式记忆
+        • Check quota / deletion (frank tenant status)
+          查配额用量, 查删除倒计时
+        • Cross-session context injection (frank ai ask --context-from <tag>)
+          ask 时注入历史相关记忆
 
-      如果你 < v0.10.2 装过 brew services 起的 daemon, 升级后请清:
-        brew services stop frank              # 停旧 launchd
-        rm -f ~/Library/LaunchAgents/homebrew.mxcl.frank.plist
+      ── Local data / 本地数据 (~/.frank/) ─────────────────────────
+        .token         sync-agent token (chmod 600)
+        .machine_id    machine fingerprint code / 机器码
+        state.json     installed skills state / skill 状态
+        cache/         git clone cache / git 缓存
+        ai_history/    frank ai ask logs / ask 历史
+        lance/         local memory store / 本地记忆库
 
-      首次配置 (可选):
-        frank login                           # sync-agent token 引导
-        frank config detect-proxy             # 自动配 Clash/Surge 代理
-        frank install <name>                  # 装 skill / MCP (走 libgit2)
+      ── Uninstall / 卸载 ──────────────────────────────────────────
+        frank cleanup          # remove skills frank installed / 清装的 skill
+        brew uninstall frank   # remove binary / 删 binary
+        rm -rf ~/.frank/       # remove all local data / 清本地全部数据
 
-      ============================================================
-      ⚠️  彻底卸载 (Homebrew 设计不动用户数据, 必须**先**清):
-        frank cleanup                         # 一行清 frank 官方装的全部
-        brew uninstall frank                  # 删 binary (brew 自动 untap)
-        rm -rf ~/.frank/                      # 清 token / state / logs
-
-      v0.7.3 起 `frank cleanup` (等价 `frank uninstall` 无参) 只清 frank 官方装的
-      (frank-official + frank-recommended). 用户自己 `frank install --url` 装的
-      第三方不动. 想一并清: `frank uninstall --including-3rd-party`.
-      ============================================================
-
-      文档: https://github.com/hutiefang76/skills-frank#readme
+      Docs / 文档: https://github.com/hutiefang76/skills-frank#readme
     EOS
   end
 end

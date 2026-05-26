@@ -1,28 +1,28 @@
 class Frank < Formula
   desc "AI toolchain governance: manage skills + MCP across Claude Code / codex / opencode"
   homepage "https://github.com/hutiefang76/skills-frank"
-  version "0.13.2"
+  version "0.14.1"
   license "MIT"
 
   on_macos do
     on_arm do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-aarch64-apple-darwin.tar.gz"
-      sha256 "862d3870d582fa3472e11742643e13bd41737e8a4c3a6768d02828f5b3a23676"
+      sha256 "1657c4dc9f650465d990eae1285ef4f4b8d554b9250b9f72babf55fbe2350c7f"
     end
     on_intel do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-x86_64-apple-darwin.tar.gz"
-      sha256 "158982ba0e62431ce5864fd2dec483baa54c140f84f344f62dfdc815b480f26c"
+      sha256 "e00ec41a3a93cf5da581e135928db432c45bd4511f1e467a9d3790d753bac172"
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "6bccd2bf53eedaa852fcd972806b519aefb1657a09ae48444fc095d6d888a34d"
+      sha256 "d2ec0a6fc7cf5a2010bd11b62b663ca695b864d5eaea3b9ab041cbbe04bfed7a"
     end
     on_intel do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "5322c757ec340a58855469281fc062540db0bf0cdf187c2d4bb740d9059ccc5a"
+      sha256 "2a04473ff7cef0dfc26c115bad93c41f52c8e29c7ab4a3395f07a21729f58fd4"
     end
   end
 
@@ -59,18 +59,16 @@ class Frank < Formula
           机器绑定 token, 10k 配额, 14 天删除流程
 
       ── What's new in v#{version} / 本版新增 ───────────────────────
-        • Built-in skill uninstall protection (frank-ask-* / frank-mem-*)
-          内置 skill 卸载保护
-        • Real MCP probe — `frank list` reads ~/.claude.json etc.
-          MCP 真状态探活
-        • Pre-install CLI check (warn if `gemini` missing)
-          装前 cli 检查
-        • doctor adds tenant status (records / quota / deletion)
-          doctor 加 tenant 状态节
-        • ai ask shortcuts --claude / --gpt / --opencode / --gemini
-          ai ask 快捷开关
-        • `frank install <URL>` auto-detects git URL
-          install 自动识别 git URL
+        • Cross-machine skill sync — `frank tenant sync` pulls and installs
+          跨机 skill 同步 (服务端记你装过啥, 新机器一键齐)
+        • MCP 4 platforms unified — claude + codex + gemini + opencode all write
+          MCP 4 家全通 (gemini + opencode 补齐)
+        • Memorix-style hook UI feedback — Claude shows "[frank-memory] saved: ..." inline
+          Memorix 风格 hook 反馈 (Claude 界面内联提示已存)
+        • `frank mcp-shim` credential-operation separation — 0 creds in ~/.claude.json
+          凭证-操作分离 (一个 MCP 多 profile 跑多套连接, 凭证 0 进 ~/.claude.json)
+        • GitHub mirror fallback for slow networks
+          国内访问慢的兜底 (frank config set mirror.github <url>)
 
       ── Quick start / 开始用 ──────────────────────────────────────
         frank doctor              # health check / 体检

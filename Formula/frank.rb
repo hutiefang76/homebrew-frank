@@ -81,25 +81,17 @@ class Frank < Formula
         frank ui                  # Web UI at 127.0.0.1:7780 / 开浏览器面板
 
       ── After login, you can / 登陆后能干嘛 ───────────────────────
-        • Sync memory across machines (frank tenant link)
-          多机共享同一份分布式记忆
-        • Check quota / deletion (frank tenant status)
-          查配额用量, 查删除倒计时
-        • Cross-session context injection (frank ai ask --context-from <tag>)
-          ask 时注入历史相关记忆
-
-      ── Local data / 本地数据 (~/.frank/) ─────────────────────────
-        .token         sync-agent token (chmod 600)
-        .machine_id    machine fingerprint code / 机器码
-        state.json     installed skills state / skill 状态
-        cache/         git clone cache / git 缓存
-        ai_history/    frank ai ask logs / ask 历史
-        lance/         local memory store / 本地记忆库
+        • Share distributed memory across multiple machines (frank tenant link)
+          多机共享同一份分布式记忆 (登陆同 token 后, A 机存的记忆 B 机能搜到)
+        • [v0.14 roadmap] Auto-sync installed skills + MCP across machines
+          [v0.14 路线图] 跨机自动同步已装 skills 和 MCP, 一次装多机用
 
       ── Uninstall / 卸载 ──────────────────────────────────────────
-        frank cleanup          # remove skills frank installed / 清装的 skill
-        brew uninstall frank   # remove binary / 删 binary
-        rm -rf ~/.frank/       # remove all local data / 清本地全部数据
+        frank cleanup          # uninstall skills written by frank itself only
+                               # 只卸 frank 自家写的 skill (nacos-ops 等);
+                               # 你装的 upstream (skill-creator 等) 和自装的不动
+        brew uninstall frank   # uninstall frank command itself / 卸载 frank 命令本身
+        rm -rf ~/.frank/       # remove all frank local state / 清掉 frank 在本地的所有状态
 
       Docs / 文档: https://github.com/hutiefang76/skills-frank#readme
     EOS

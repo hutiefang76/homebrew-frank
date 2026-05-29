@@ -49,14 +49,16 @@ class Frank < Formula
         一个命令搞定全部。
 
       ── Main features / 主要功能 ──────────────────────────────────
-        • Skill + MCP install/uninstall, three platforms in sync
-          Skill + MCP 一键装卸, 三平台同步
-        • Distributed memory: LanceDB local + Qdrant server, Hybrid RRF
-          分布式记忆: LanceDB 本地 + Qdrant 服务端, Hybrid RRF 召回
-        • Cross-AI ask: --claude / --gpt / --opencode / --gemini
-          跨 AI ask: 一行调四家 cli
-        • Machine-bound tenant token, 10k records quota, 14d deletion
-          机器绑定 token, 10k 配额, 14 天删除流程
+        1. Cross-machine sharing — memory + skills + MCP follow you everywhere
+           跨机共享 — 记忆 + skills + MCP 在你所有机器间同步, 换台机器一键齐
+        2. Cross-AI communication — ask claude/gpt/gemini/opencode, shared context
+           跨 AI 交流 — 一行问任意 cli, 上下文互通 (claude 写的 codex review 拿得到)
+        3. Frank-built skills — nacos / streampark / doris ops, ready to install
+           芳哥自研 skills — nacos / streampark / doris 运维, 装了就用
+        4. Frank-curated skills — hand-picked upstream (anthropics / community)
+           芳哥推荐 skills — 精选 upstream (anthropics / 社区好货)
+        5. [coming] Frank's powerful AI prompt engine
+           [待开发] 芳哥强大的 AI 提示词功能
 
       ── What's new in v#{version} / 本版新增 ───────────────────────
         • Cross-machine skill sync — `frank tenant sync` pulls and installs
@@ -77,12 +79,6 @@ class Frank < Formula
         frank ai ask --opencode "hi"   # ask any AI / 跨 AI ask
         frank memory add "fact"   # add to memory / 加记忆
         frank ui                  # Web UI at 127.0.0.1:7780 / 开浏览器面板
-
-      ── After login, you can / 登陆后能干嘛 ───────────────────────
-        • Share distributed memory across multiple machines (frank tenant link)
-          多机共享同一份分布式记忆 (登陆同 token 后, A 机存的记忆 B 机能搜到)
-        • [v0.14 roadmap] Auto-sync installed skills + MCP across machines
-          [v0.14 路线图] 跨机自动同步已装 skills 和 MCP, 一次装多机用
 
       ── Uninstall / 卸载 ──────────────────────────────────────────
         frank cleanup          # uninstall skills written by frank itself only

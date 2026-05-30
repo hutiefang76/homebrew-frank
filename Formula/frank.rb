@@ -1,28 +1,28 @@
 class Frank < Formula
   desc "AI toolchain governance: manage skills + MCP across Claude Code / codex / opencode"
   homepage "https://github.com/hutiefang76/skills-frank"
-  version "0.14.1"
+  version "0.15.2"
   license "MIT"
 
   on_macos do
     on_arm do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-aarch64-apple-darwin.tar.gz"
-      sha256 "1657c4dc9f650465d990eae1285ef4f4b8d554b9250b9f72babf55fbe2350c7f"
+      sha256 "f7a22a1282a7a40a582c620f6654910ebe1ee8ba9b405c10b21ab2b645ed8414"
     end
     on_intel do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-x86_64-apple-darwin.tar.gz"
-      sha256 "e00ec41a3a93cf5da581e135928db432c45bd4511f1e467a9d3790d753bac172"
+      sha256 "9e4c0a16334eb87a8e39057e92e80ce535b8fc426bec3c58b471d9101dadbf5d"
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-aarch64-unknown-linux-gnu.tar.gz"
-      sha256 "d2ec0a6fc7cf5a2010bd11b62b663ca695b864d5eaea3b9ab041cbbe04bfed7a"
+      sha256 "774e2c79f0fbae47ccc9e450283e65b54043dfc07036e68e2fb9be77b1f617bc"
     end
     on_intel do
       url "https://github.com/hutiefang76/skills-frank/releases/download/v#{version}/frank-v#{version}-x86_64-unknown-linux-gnu.tar.gz"
-      sha256 "2a04473ff7cef0dfc26c115bad93c41f52c8e29c7ab4a3395f07a21729f58fd4"
+      sha256 "1ff02bd335dc8ab88936f5d7d1c60ffc94792152c96c6534e41e3383891096d0"
     end
   end
 
@@ -61,16 +61,11 @@ class Frank < Formula
            [待开发] 芳哥强大的 AI 提示词功能
 
       ── What's new in v#{version} / 本版新增 ───────────────────────
-        • Cross-machine skill sync — `frank tenant sync` pulls and installs
-          跨机 skill 同步 (服务端记你装过啥, 新机器一键齐)
-        • MCP 4 platforms unified — claude + codex + gemini + opencode all write
-          MCP 4 家全通 (gemini + opencode 补齐)
-        • Memorix-style hook UI feedback — Claude shows "[frank-memory] saved: ..." inline
-          Memorix 风格 hook 反馈 (Claude 界面内联提示已存)
-        • `frank mcp-shim` credential-operation separation — 0 creds in ~/.claude.json
-          凭证-操作分离 (一个 MCP 多 profile 跑多套连接, 凭证 0 进 ~/.claude.json)
-        • GitHub mirror fallback for slow networks
-          国内访问慢的兜底 (frank config set mirror.github <url>)
+        • Dynamic model list (models.dev, no longer hardcoded) — auto-refreshed 12h
+          模型列表动态加载 (models.dev, 不再写死), 12 小时自动刷新当前模型
+        • Cross-engine AI talk — frank-ask-<provider>-<model> variants
+          跨引擎 AI 沟通 — claude 里调 frank-ask-codex 问 gpt, 反之亦然; 默认或指定模型
+          (例 /frank-ask-claude-opus-4-8, /frank-ask-codex-gpt-5-5)
 
       ── Quick start / 开始用 ──────────────────────────────────────
         frank doctor              # health check / 体检
